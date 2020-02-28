@@ -1,3 +1,8 @@
+# Instructor Comments (ERD only)
+
+Your ERD is not correct. It needs to be redone completly for its final version. You need to add more entities (approximatly 16 entities). Childs of ISA relationships cannot count as main entities because they are not strong. Main entities are strong ones. 
+
+
 # The Semantic-Conceptual Model 
 
 In this homework, students will learn to design a database system from a concept based on use cases, bussines rules (database requeriments), and Entity Relation Diagrams (ERD). 
