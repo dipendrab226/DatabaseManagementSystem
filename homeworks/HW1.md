@@ -1,3 +1,12 @@
+# Grade
+
+```
+94/100
+```
+1. -2 Missing Recursive relationship
+2. -2 Browse shouldn't have a box around it (not many to many)
+3. -2 Missing tests for each business rules
+
 # Instructor Comments (ERD only)
 
 Your ERD is not correct. It needs to be redone completly for its final version. You need to add more entities (approximatly 16 entities). Childs of ISA relationships cannot count as main entities because they are not strong. Main entities are strong ones. 
