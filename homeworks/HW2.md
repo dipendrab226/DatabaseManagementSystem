@@ -12,7 +12,7 @@ Use MySQLWorkbench or any other SQL compatible database software tool to create 
 
 ## Section III: Forward Engineering 
 
-Once your database model is done forward engineering your database model to create the databasemodel.sql file that contains all the CREATE SQL statements to create your database model. Copy and paste the content of this file in this section, and upload the file to this directory
+Once your database model is done forward engineering your database model to create the databasemodel.sql file that contains all the CREATE SQL statements to create your database model. Copy and paste the content of this file in this section, and upload the file to this directory  
 
 ## Section IV: Inserting Data 
 
