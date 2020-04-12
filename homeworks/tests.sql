@@ -1,4 +1,4 @@
-use testschema5;
+use databasemodel;
 delete from account where Accountid=2;
 update account set ruser_RUserid=0 where Accountid=2;
 select * from account;

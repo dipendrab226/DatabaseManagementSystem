@@ -93,8 +93,8 @@ Insert into referral values(3, 'Ben', 1);
 
 
 Insert into share values(1, 1, 1, 1);
-Insert into share values(1, 1, 2, 1);
-Insert into share values(2, 1, 3, 1);
+Insert into share values(2, 1, 2, 1);
+Insert into share values(3, 1, 3, 1);
 
 
 
