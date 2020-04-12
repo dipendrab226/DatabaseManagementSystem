@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema databasemodel
+-- Schema new1
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema databasemodel
+-- Schema new1
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `databasemodel` DEFAULT CHARACTER SET utf8 ;
-USE `databasemodel` ;
+CREATE SCHEMA IF NOT EXISTS `new1` DEFAULT CHARACTER SET utf8 ;
+USE `new1` ;
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`category`
+-- Table `new1`.`category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`category` (
+CREATE TABLE IF NOT EXISTS `new1`.`category` (
   `Cid` INT(11) NOT NULL,
   `Cname` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`Cid`))
@@ -27,9 +27,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`bank`
+-- Table `new1`.`bank`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`bank` (
+CREATE TABLE IF NOT EXISTS `new1`.`bank` (
   `Bankid` INT(11) NOT NULL,
   `BankName` VARCHAR(45) NULL DEFAULT NULL,
   `Amount` INT(11) NULL DEFAULT NULL,
@@ -39,9 +39,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`perk`
+-- Table `new1`.`perk`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`perk` (
+CREATE TABLE IF NOT EXISTS `new1`.`perk` (
   `Perkid` INT(11) NOT NULL,
   `Perkname` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`Perkid`))
@@ -50,9 +50,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`level`
+-- Table `new1`.`level`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`level` (
+CREATE TABLE IF NOT EXISTS `new1`.`level` (
   `Levelid` INT(11) NOT NULL,
   `Lname` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`Levelid`))
@@ -61,41 +61,60 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`ruser`
+-- Table `new1`.`ruser`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`ruser` (
+CREATE TABLE IF NOT EXISTS `new1`.`ruser` (
   `RUserid` INT(10) UNSIGNED NOT NULL,
   `Firstname` VARCHAR(45) NOT NULL,
   `Lastname` VARCHAR(45) NOT NULL,
   `DOB` DATE NOT NULL,
   `Age` INT(11) NOT NULL,
-  `Category_Cid` INT(11) NOT NULL,
+  `Category_Cid` INT(11) NULL,
   `bank_Bankid` INT(11) NULL,
   `perk_Perkid` INT(11) NULL,
-  `level_Levelid` INT(11) NOT NULL,
+  `level_Levelid` INT(11) NULL,
   PRIMARY KEY (`RUserid`),
-  INDEX `fk_User_Category1_idx` (`Category_Cid` ASC) VISIBLE,
+  INDEX `fk_User_Category1_idx` (`Category_Cid` ASC) INVISIBLE,
   INDEX `fk_ruser_bank1_idx` (`bank_Bankid` ASC) VISIBLE,
   INDEX `fk_ruser_perk1_idx` (`perk_Perkid` ASC) VISIBLE,
   INDEX `fk_ruser_level1_idx` (`level_Levelid` ASC) VISIBLE,
   CONSTRAINT `fk_User_Category1`
     FOREIGN KEY (`Category_Cid`)
-    REFERENCES `databasemodel`.`category` (`Cid`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    REFERENCES `new1`.`category` (`Cid`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL,
   CONSTRAINT `fk_ruser_bank1`
     FOREIGN KEY (`bank_Bankid`)
-    REFERENCES `databasemodel`.`bank` (`Bankid`)
+    REFERENCES `new1`.`bank` (`Bankid`)
     ON DELETE SET NULL
     ON UPDATE SET NULL,
   CONSTRAINT `fk_ruser_perk1`
     FOREIGN KEY (`perk_Perkid`)
-    REFERENCES `databasemodel`.`perk` (`Perkid`)
+    REFERENCES `new1`.`perk` (`Perkid`)
     ON DELETE SET NULL
     ON UPDATE SET NULL,
   CONSTRAINT `fk_ruser_level1`
     FOREIGN KEY (`level_Levelid`)
-    REFERENCES `databasemodel`.`level` (`Levelid`)
+    REFERENCES `new1`.`level` (`Levelid`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `new1`.`account`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `new1`.`account` (
+  `Accountid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `Email` VARCHAR(45) NOT NULL,
+  `Paasword` VARCHAR(45) NOT NULL,
+  `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`Accountid`),
+  INDEX `fk_account_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
+  CONSTRAINT `fk_account_ruser1`
+    FOREIGN KEY (`ruser_RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -103,45 +122,26 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`account`
+-- Table `new1`.`paymethod`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`account` (
-  `Accountid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Email` VARCHAR(45) NOT NULL,
-  `Paasword` VARCHAR(45) NOT NULL,
-  `ruser_RUserid` INT(10) UNSIGNED NULL,
-  PRIMARY KEY (`Accountid`),
-  INDEX `fk_account_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
-  CONSTRAINT `fk_account_ruser1`
-    FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `databasemodel`.`paymethod`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`paymethod` (
+CREATE TABLE IF NOT EXISTS `new1`.`paymethod` (
   `Payid` INT(11) NOT NULL AUTO_INCREMENT,
-  `ruser_RUserid` INT(10) UNSIGNED NULL,
+  `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`Payid`),
   INDEX `fk_paymethod_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_paymethod_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL)
+    REFERENCES `new1`.`ruser` (`RUserid`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`bankac`
+-- Table `new1`.`bankac`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`bankac` (
+CREATE TABLE IF NOT EXISTS `new1`.`bankac` (
   `paymethod_Payid` INT(11) NOT NULL,
   `BankACid` INT(11) NOT NULL,
   `Descrp` VARCHAR(45) NULL,
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `databasemodel`.`bankac` (
   INDEX `fk_bankac_paymethod1_idx` (`paymethod_Payid` ASC) VISIBLE,
   CONSTRAINT `fk_bankac_paymethod1`
     FOREIGN KEY (`paymethod_Payid`)
-    REFERENCES `databasemodel`.`paymethod` (`Payid`)
+    REFERENCES `new1`.`paymethod` (`Payid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -157,47 +157,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`stock`
+-- Table `new1`.`creditcard`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`stock` (
-  `Payid` INT(11) NOT NULL AUTO_INCREMENT,
-  `Stockid` INT(11) NOT NULL,
-  `Stockname` TEXT NOT NULL,
-  `Stockvalue` INT(11) NOT NULL,
-  PRIMARY KEY (`Payid`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `databasemodel`.`buying`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`buying` (
-  `Stock_Payid` INT(11) NOT NULL,
-  `Stockid` INT(11) NOT NULL,
-  `Buydate` DATE NOT NULL,
-  `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`Stock_Payid`, `ruser_RUserid`),
-  INDEX `fk_Buying_Stock1_idx` (`Stock_Payid` ASC) VISIBLE,
-  INDEX `fk_buying_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
-  CONSTRAINT `fk_Buying_Stock1`
-    FOREIGN KEY (`Stock_Payid`)
-    REFERENCES `databasemodel`.`stock` (`Payid`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_buying_ruser1`
-    FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `databasemodel`.`creditcard`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`creditcard` (
+CREATE TABLE IF NOT EXISTS `new1`.`creditcard` (
   `paymethod_Payid` INT(11) NOT NULL,
   `CCid` INT(11) NOT NULL,
   `Descrp` VARCHAR(45) NULL,
@@ -205,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `databasemodel`.`creditcard` (
   INDEX `fk_creditcard_paymethod1_idx` (`paymethod_Payid` ASC) VISIBLE,
   CONSTRAINT `fk_creditcard_paymethod1`
     FOREIGN KEY (`paymethod_Payid`)
-    REFERENCES `databasemodel`.`paymethod` (`Payid`)
+    REFERENCES `new1`.`paymethod` (`Payid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -213,9 +175,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`days`
+-- Table `new1`.`days`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`days` (
+CREATE TABLE IF NOT EXISTS `new1`.`days` (
   `Daysid` INT(11) NOT NULL,
   `Stockid` INT(11) NULL DEFAULT NULL,
   `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
@@ -223,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `databasemodel`.`days` (
   INDEX `fk_days_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_days_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -231,9 +193,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`debitcard`
+-- Table `new1`.`debitcard`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`debitcard` (
+CREATE TABLE IF NOT EXISTS `new1`.`debitcard` (
   `paymethod_Payid` INT(11) NOT NULL,
   `DebitCardid` INT(11) NOT NULL,
   `Descrp` VARCHAR(45) NULL,
@@ -241,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `databasemodel`.`debitcard` (
   INDEX `fk_debitcard_paymethod1_idx` (`paymethod_Payid` ASC) VISIBLE,
   CONSTRAINT `fk_debitcard_paymethod1`
     FOREIGN KEY (`paymethod_Payid`)
-    REFERENCES `databasemodel`.`paymethod` (`Payid`)
+    REFERENCES `new1`.`paymethod` (`Payid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -249,17 +211,17 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`expert`
+-- Table `new1`.`expert`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`expert` (
+CREATE TABLE IF NOT EXISTS `new1`.`expert` (
   `Eid` INT(11) NOT NULL AUTO_INCREMENT,
   `ExpertName` VARCHAR(45) NOT NULL,
-  `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`Eid`, `ruser_RUserid`),
+  `ruser_RUserid` INT(10) UNSIGNED NULL,
+  PRIMARY KEY (`Eid`),
   INDEX `fk_expert_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_expert_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -267,9 +229,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`friends`
+-- Table `new1`.`friends`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`friends` (
+CREATE TABLE IF NOT EXISTS `new1`.`friends` (
   `Friendid` INT(11) NOT NULL AUTO_INCREMENT,
   `Fname` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`Friendid`))
@@ -278,9 +240,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`invite`
+-- Table `new1`.`invite`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`invite` (
+CREATE TABLE IF NOT EXISTS `new1`.`invite` (
   `Inviteid` INT(11) NOT NULL AUTO_INCREMENT,
   `Personname` VARCHAR(45) NULL DEFAULT NULL,
   `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
@@ -288,7 +250,7 @@ CREATE TABLE IF NOT EXISTS `databasemodel`.`invite` (
   INDEX `fk_invite_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_invite_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -296,36 +258,54 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`wishlist`
+-- Table `new1`.`stock`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`wishlist` (
-  `Wishlistid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `new1`.`stock` (
   `Stockid` INT(11) NOT NULL,
-  `Wname` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`Wishlistid`, `Stockid`))
+  `Stockvalue` INT(11) NOT NULL,
+  `stockname` VARCHAR(45) NULL,
+  PRIMARY KEY (`Stockid`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`maintain`
+-- Table `new1`.`wishlist`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`maintain` (
+CREATE TABLE IF NOT EXISTS `new1`.`wishlist` (
+  `Wishlistid` INT(11) NOT NULL,
+  `Stockid` INT(11) NOT NULL,
+  `Wname` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`Wishlistid`, `Stockid`),
+  INDEX `fk_wishlist_stockid_idx` (`Stockid` ASC) VISIBLE,
+  CONSTRAINT `fk_wishlist_stockid`
+    FOREIGN KEY (`Stockid`)
+    REFERENCES `new1`.`stock` (`Stockid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `new1`.`maintain`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `new1`.`maintain` (
   `Maintainid` INT(11) NOT NULL AUTO_INCREMENT,
   `Wishlist_Wishlistid` INT(11) NOT NULL,
   `Wishlist_Stockid` INT(11) NOT NULL,
-  `ruser_RUserid` INT(10) UNSIGNED NULL,
+  `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`Maintainid`, `Wishlist_Wishlistid`, `Wishlist_Stockid`),
   INDEX `fk_Maintain_Wishlist1_idx` (`Wishlist_Wishlistid` ASC, `Wishlist_Stockid` ASC) VISIBLE,
   INDEX `fk_maintain_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_Maintain_Wishlist1`
     FOREIGN KEY (`Wishlist_Wishlistid` , `Wishlist_Stockid`)
-    REFERENCES `databasemodel`.`wishlist` (`Wishlistid` , `Stockid`)
+    REFERENCES `new1`.`wishlist` (`Wishlistid` , `Stockid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_maintain_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -333,9 +313,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`rating`
+-- Table `new1`.`rating`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`rating` (
+CREATE TABLE IF NOT EXISTS `new1`.`rating` (
   `Ratingid` INT(11) NOT NULL,
   `Ratingnumber` VARCHAR(45) NULL DEFAULT NULL,
   `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
@@ -343,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `databasemodel`.`rating` (
   INDEX `fk_rating_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_rating_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -351,9 +331,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`referral`
+-- Table `new1`.`referral`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`referral` (
+CREATE TABLE IF NOT EXISTS `new1`.`referral` (
   `Referralid` INT(11) NOT NULL,
   `Refferedname` VARCHAR(45) NULL DEFAULT NULL,
   `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
@@ -361,7 +341,7 @@ CREATE TABLE IF NOT EXISTS `databasemodel`.`referral` (
   INDEX `fk_referral_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_referral_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -369,28 +349,59 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `databasemodel`.`share`
+-- Table `new1`.`share`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `databasemodel`.`share` (
+CREATE TABLE IF NOT EXISTS `new1`.`share` (
   `Shareid` INT(11) NOT NULL,
-  `Stockid` INT(11) NOT NULL,
+  `Stockid` INT(11) NULL,
   `Friends_Friendid` INT(11) NOT NULL,
   `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`Shareid`, `Friends_Friendid`, `ruser_RUserid`),
+  PRIMARY KEY (`Shareid`),
   INDEX `fk_Share_Friends1_idx` (`Friends_Friendid` ASC) VISIBLE,
   INDEX `fk_share_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
   CONSTRAINT `fk_Share_Friends1`
     FOREIGN KEY (`Friends_Friendid`)
-    REFERENCES `databasemodel`.`friends` (`Friendid`)
+    REFERENCES `new1`.`friends` (`Friendid`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_share_ruser1`
     FOREIGN KEY (`ruser_RUserid`)
-    REFERENCES `databasemodel`.`ruser` (`RUserid`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    REFERENCES `new1`.`ruser` (`RUserid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `new1`.`Buying`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `new1`.`Buying` (
+  `paymethod_payid` INT NOT NULL,
+  `Buydate` DATE NULL,
+  `Description` VARCHAR(45) NULL,
+  `stock_Stockid` INT(11) NOT NULL,
+  `ruser_RUserid` INT(10) UNSIGNED NOT NULL,
+  INDEX `fk_Buying_stock1_idx` (`stock_Stockid` ASC) VISIBLE,
+  INDEX `fk_Buying_ruser1_idx` (`ruser_RUserid` ASC) VISIBLE,
+  PRIMARY KEY (`paymethod_payid`),
+  INDEX `fk_Buying_paymethod1_idx` (`paymethod_payid` ASC) INVISIBLE,
+  CONSTRAINT `fk_Buying_stock1`
+    FOREIGN KEY (`stock_Stockid`)
+    REFERENCES `new1`.`stock` (`Stockid`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_Buying_ruser1`
+    FOREIGN KEY (`ruser_RUserid`)
+    REFERENCES `new1`.`ruser` (`RUserid`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_Buying_paymethod1`
+    FOREIGN KEY (`paymethod_payid`)
+    REFERENCES `new1`.`paymethod` (`Payid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

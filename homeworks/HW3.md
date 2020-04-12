@@ -1,6 +1,8 @@
 # External Sorting or Indexing with B+ index 
 
-In this homework, you can select between two options, (1) implementing a database external sorting algorithm, or (2) implementing a B+ tree index. Below are the details for each one of the options:
+In this homework, you can select between two options, 
+(1) implementing a database external sorting algorithm, or 
+(2) implementing a B+ tree index. Below are the details for each one of the options:
 
 # Indexing: External Merge Sorting 
 
