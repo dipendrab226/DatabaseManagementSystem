@@ -1,9 +1,12 @@
 # Grade
 
 ```
-60
+83
 ```
-Errors in Insert.sql (Incorrect Integer value: 'Microsoft' for column 'Stockid' at row 1)
+1. Database name "new1"? The database model must have the same name of your application + db. -2
+2. Insert and Test file are not compiling: error: "Use databasemodel": databasemodel does not exist in my system since you created the table "new1" and not "databasemodel" -10 
+3. My testing scripts found a lot of errors in your models. In other words, you did not tested it correctly. -5
+
 
 
 # The Relational Model 
