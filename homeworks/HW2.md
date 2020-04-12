@@ -1,3 +1,11 @@
+# Grade
+
+```
+60
+```
+Errors in Insert.sql (Incorrect Integer value: 'Microsoft' for column 'Stockid' at row 1)
+
+
 # The Relational Model 
 
 The relational model represents how data is storaged in databases based in a conceptual design (ERD). In this homework you will create the database model based in your ERD. 
