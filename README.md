@@ -9,9 +9,9 @@ Welcome to Database Systems!. Please modify this README file with the following 
 | Assignment               | Completed     |
 | ------------------------ | ------------- |
 | Conceptual Model         | Completed     |
-| Relational Model         | Completed |
-| Indexing                 | not done yet  |
-| Course Project           | not done yet  |
+| Relational Model         | Completed     |
+| Indexing                 | Completed     |
+| Course Project           | Completed     |
 
 
 If a homework or the course project is not set to done at grading time, it won't be graded. The first thing I do when grading assignments is to check the above table. 
