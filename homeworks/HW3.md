@@ -1,6 +1,6 @@
 # External Sorting or Indexing with B+ index 
 
-In this homework, you can select between two options, 
+In this assignment, you can select between two options, 
 (1) implementing a database external sorting algorithm, or 
 (2) implementing a B+ tree index. Below are the details for each one of the options:
 
@@ -131,9 +131,5 @@ B+ tree:
  
 ```
 
-## Grading Rubric:
-* Correct and complete implementation of the external merge sort algorithm: 3%
-* Appropriate documentation of the code, coding style and readability. If I cannot understand your
-code, then your code is not good. 2%
-* If I cannot run your program, you will get a 0 in this assignment. So, make sure you provide detailed instructions. I will run it from an UNIX terminal.
+ So, make sure you provide detailed instructions. I will run it from an UNIX terminal.
 
